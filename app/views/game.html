@@ -1,0 +1,6 @@
+<div style="width: 100%; height: 20px; background-color: #96ff92; margin-bottom: 10px;">view</div>
+
+<div class="game" ng-if="cells.length > 0">
+    <div field-cell ng-repeat="cell in cells" cell="cell" cell-side="cellSide"></div>
+</div>
+<button ng-click="fill()">refill</button>
