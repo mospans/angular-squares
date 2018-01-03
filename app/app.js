@@ -18,13 +18,13 @@ app.controller('game', function ($scope) {
         return Math.floor(Math.random() * (to - from + 1)) + from;
     };
 
-    $scope.generateRandomColor = function (from, to, excluded_values) {
+    $scope.generateRandomColor = function (excluded_values) {
         if (excluded_values === null || excluded_values === undefined) {
             excluded_values = [];
         }
         var result;
         do {
-            result = $scope.random(from, to);
+            result = $scope.random(1, $scope.colorsCount);
         } while (excluded_values.indexOf(result) !== -1);
 
         return result;
@@ -71,7 +71,7 @@ app.controller('game', function ($scope) {
                 $scope.cells.push(new FieldCell(
                     x,
                     y,
-                    $scope.generateRandomColor(1, $scope.colorsCount, excluded_color_indexes)
+                    $scope.generateRandomColor(excluded_color_indexes)
                 ));
             }
         }

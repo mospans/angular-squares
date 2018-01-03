@@ -1,6 +1,15 @@
 <div style="width: 100%; height: 20px; background-color: #96ff92; margin-bottom: 10px;">view</div>
 
-<div class="game" ng-if="cells.length > 0">
-    <div field-cell ng-repeat="cell in cells" cell="cell" cell-side="cellSide"></div>
+<div class="game" ng-if="cells.length > 0" ng-style="{
+    height: (height * cellSide) + 'px',
+    width: (width * cellSide) + 'px'
+}">
+    <div ng-repeat="cell in cells" ng-click="cell.onClick(generateRandomColor([cell.color]))" ng-style="{
+        position: 'absolute',
+        left: (cell.x * cellSide) + 'px',
+        top: (cell.y * cellSide) + 'px'
+    }">
+        {{ cell.color }}{{ cell.clicked ? 'x' : '' }}
+    </div>
 </div>
 <button ng-click="fill()">refill</button>
