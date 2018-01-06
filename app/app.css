@@ -1,5 +1,8 @@
 /* app css stylesheet */
 
-.game {
-  position: relative;
+.squares-game {
+    position: relative;
+    width: 250px;
+    height: 100%;
+    margin: 0 auto;
 }

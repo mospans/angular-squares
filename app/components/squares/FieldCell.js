@@ -5,6 +5,11 @@ var FieldCell = function (x, y, color, clicked) {
     this.y = y;
     this.color = color;
     this.clicked = clicked || false;
+    this.animation = {
+        enabled: false,
+        tick: 0,
+        properties: {}
+    };
 };
 
 FieldCell.prototype.onClick = function (new_color) {

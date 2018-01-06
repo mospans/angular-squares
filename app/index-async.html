@@ -30,9 +30,11 @@
     // load all of the dependencies asynchronously.
     $script([
       'bower_components/angular/angular.js',
+      'bower_components/angular-animate/angular-animate.js',
       'bower_components/angular-route/angular-route.js',
       'app.js',
-      'components/field-cell/FieldCell.js'
+      'components/squares/game.js',
+      'components/squares/FieldCell.js'
     ], function() {
       // when all is done, execute bootstrap angular application
       angular.bootstrap(document, ['myApp']);
@@ -40,6 +42,8 @@
   </script>
   <title>My AngularJS App</title>
   <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="/components/squares/game.css">
+  <link rel="stylesheet" href="/components/squares/field-cell.css">
 </head>
 <body ng-cloak>
 

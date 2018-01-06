@@ -1,0 +1,17 @@
+.field-cell {
+    position: absolute;
+    z-index: 1;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: none;
+}
+
+.field-cell:not(.clicked) {
+    cursor: pointer;
+    background-image: none;
+}
+
+.field-cell.clicked {
+    cursor: default;
+    background-image: url('images/cross.png');
+}
