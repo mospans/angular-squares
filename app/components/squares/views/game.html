@@ -13,11 +13,11 @@
     }"
 >
     <div ng-repeat="cell in cells"
-        class="field-cell"
-        ng-if="game.status !== game.statuses.GAME_OVER"
-        ng-click="fieldCellOnClick()"
-        ng-class="{clicked: cell.clicked, animated: cell.animation.enabled}"
-        ng-style="getFieldCellStyle()"
+         class="field-cell"
+         ng-if="game.status !== game.statuses.GAME_OVER"
+         ng-click="fieldCellOnClick()"
+         ng-class="{clicked: cell.clicked, animated: cell.animation.enabled}"
+         ng-style="getFieldCellStyle()"
     ></div>
 
     <div class="game_over"
