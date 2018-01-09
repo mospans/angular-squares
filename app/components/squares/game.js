@@ -42,7 +42,7 @@ game.controller('game', ['$scope', '$q', function ($scope, $q) {
             ANIMATION_GAME_OVER: 9,
             GAME_OVER: 10
         },
-        status: 1
+        status: undefined
     };
 
     $scope.random = function (from, to) {
@@ -245,7 +245,7 @@ game.controller('game', ['$scope', '$q', function ($scope, $q) {
         }
     };
 
-    $scope.fill = function () {
+    var fill = function () {
         $scope.cells = [];
 
         $scope.fieldCellsCoordinatesForEach(function (x, y) {
@@ -283,7 +283,7 @@ game.controller('game', ['$scope', '$q', function ($scope, $q) {
         $scope.game.points = 0;
         disappearingFieldCellsIndexes = [];
 
-        $scope.fill();
+        fill();
         $scope.game.status = $scope.game.statuses.RAN;
     };
 
@@ -416,6 +416,29 @@ game.controller('game', ['$scope', '$q', function ($scope, $q) {
         return true;
     };
 
+    var disappearAll = function () {
+        var needToRestart = false,
+            fieldCell,
+            needToAnimateDisappearingCells = false;
+        do {
+            needToRestart = false;
+            for (var cellIndex in $scope.cells) {
+                fieldCell = $scope.cells[cellIndex];
+                if (disappearByFieldCell(fieldCell) === true) {
+                    needToRestart = true;
+                    needToAnimateDisappearingCells = true;
+                    break;
+                }
+            }
+        } while (needToRestart === true);
+
+        if (needToAnimateDisappearingCells === true) {
+            $scope.game.status = $scope.game.statuses.ANIMATION_CELLS_DISAPPEARING;
+        } else {
+            $scope.checkGameOver();
+        }
+    };
+
     var rearrangeFieldCellsBeforeShift = function () {
         var changedPartOfColumn,
             fieldCell,
@@ -492,16 +515,21 @@ game.controller('game', ['$scope', '$q', function ($scope, $q) {
          */
         function (newValue, oldValue) {
             switch (newValue) {
+                case $scope.game.statuses.RAN:
+                    if (oldValue !== $scope.game.statuses.STOPPED) {
+                        disappearAll();
+                    }
+                    break;
+
                 case $scope.game.statuses.ANIMATION_CELLS_DISAPPEARING:
                     $scope.fieldCellsCoordinatesForEach(function (x, y) {
                         if (isFieldCellProcessed(x, y) === false) {
                             return undefined;
                         }
                         var fieldCell = $scope.getFieldCell(x, y);
-                        fieldCell.animation.properties.opacity = {
-                            start: 1,
-                            end: 0
-                        };
+                        fieldCell.animation.properties.opacity = {};
+                        fieldCell.animation.properties.opacity.start = 1;
+                        fieldCell.animation.properties.opacity.end = 0;
                         fieldCell.animation.enabled = true;
                     });
                     break;
@@ -513,8 +541,10 @@ game.controller('game', ['$scope', '$q', function ($scope, $q) {
                 case $scope.game.statuses.ANIMATION_GAME_OVER:
                     $scope.fieldCellsCoordinatesForEach(function (x, y) {
                         var fieldCell = $scope.getFieldCell(x, y);
-                        fieldCell.animation.properties.left = {start: (x * $scope.cellSide)};
-                        fieldCell.animation.properties.top = {start: (y * $scope.cellSide)};
+                        fieldCell.animation.properties.left = {};
+                        fieldCell.animation.properties.left.start = x * $scope.cellSide;
+                        fieldCell.animation.properties.top = {};
+                        fieldCell.animation.properties.top.start = y * $scope.cellSide;
 
                         // 50% - 50%
                         if ($scope.random(1, 2) === 1) {
@@ -541,9 +571,8 @@ game.controller('game', ['$scope', '$q', function ($scope, $q) {
     );
 
     $scope.game.status = $scope.game.statuses.STOPPED;
-}]);
-
-game.animation('.animated', function animationFactory() {
+}])
+.animation('.animated', function animationFactory() {
     return {
         addClass: function (element, className, done) {
             var $scope = element.scope();
